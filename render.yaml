@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: quant-trading-framework
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m quant_trading.dashboard
+    envVars:
+      - key: CACHE_DB_PATH
+        value: /tmp/cache.db
+      - key: CACHE_TTL_HOURS
+        value: "24"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: ALPHA_VANTAGE_API_KEY
+        sync: false   # set manually in Render dashboard — never committed
