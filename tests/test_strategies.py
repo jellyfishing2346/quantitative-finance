@@ -81,3 +81,5 @@ def test_mean_reversion_trades():
     df = make_ohlcv_df(200)
     strat, final_value = run_strategy(BollingerMeanReversion, df)
     assert final_value != 100_000
+
+
