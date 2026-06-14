@@ -3,7 +3,7 @@ services:
     name: quant-trading-framework
     runtime: python
     buildCommand: pip install -r requirements.txt && pip install -e .
-    startCommand: python -m quant_trading.dashboard
+    startCommand: python run.py
     envVars:
       - key: PYTHONPATH
         value: /opt/render/project/src
