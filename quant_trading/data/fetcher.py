@@ -85,12 +85,16 @@ class DataFetcher:
     # ------------------------------------------------------------------
 
     def _fetch_live(self, symbol: str, start: str, end: str, interval: str) -> tuple[pd.DataFrame, str]:
+        errors: list[str] = []
+
         try:
             df = self._fetch_yfinance(symbol, start, end, interval)
             if df is not None and not df.empty:
                 return df, "yfinance"
-            logger.warning("yfinance returned empty data for %s, trying Alpha Vantage", symbol)
+            errors.append("yfinance: returned empty data")
+            logger.warning("yfinance returned empty data for %s", symbol)
         except Exception as exc:
+            errors.append(f"yfinance: {exc}")
             logger.warning("yfinance error for %s: %s", symbol, exc)
 
         if settings.alpha_vantage_api_key:
@@ -98,12 +102,16 @@ class DataFetcher:
                 df = self._fetch_alpha_vantage(symbol, start, end, interval)
                 if df is not None and not df.empty:
                     return df, "alpha_vantage"
+                errors.append("alpha_vantage: returned empty data")
             except Exception as exc:
+                errors.append(f"alpha_vantage: {exc}")
                 logger.warning("Alpha Vantage error for %s: %s", symbol, exc)
+        else:
+            errors.append("alpha_vantage: no API key configured")
 
         raise RuntimeError(
             f"All data sources failed for {symbol} [{start} → {end}] {interval}. "
-            "Check network access and API keys."
+            f"Details: {' | '.join(errors)}"
         )
 
     def _fetch_yfinance(self, symbol: str, start: str, end: str, interval: str) -> Optional[pd.DataFrame]:
@@ -113,11 +121,18 @@ class DataFetcher:
         if yf_interval is None:
             raise ValueError(f"Unsupported interval for yfinance: {interval!r}")
 
-        ticker = yf.Ticker(symbol)
-        df = ticker.history(start=start, end=end, interval=yf_interval, auto_adjust=False)
+        # yf.download is more stable than Ticker.history across yfinance versions
+        df = yf.download(
+            symbol, start=start, end=end, interval=yf_interval,
+            auto_adjust=False, progress=False, threads=False,
+        )
 
         if df.empty:
             return None
+
+        # yfinance 1.x returns MultiIndex columns even for a single ticker
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = df.columns.get_level_values(0)
 
         df = df.rename(columns={
             "Open": "open", "High": "high", "Low": "low",
