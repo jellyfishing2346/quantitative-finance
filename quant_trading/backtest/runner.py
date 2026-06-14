@@ -1,6 +1,7 @@
 import backtrader as bt
 import pandas as pd
 from .results import BacktestResult
+from quant_trading.analytics.equity import extract_equity_curve
 
 class BacktestRunner:
     def __init__(
@@ -25,13 +26,19 @@ class BacktestRunner:
         cerebro.broker.set_slippage_perc(self.slippage)
         # add trade analyzer so you can count trades:
         cerebro.addanalyzer(bt.analyzers.TradeAnalyzer, _name="trades")
+        cerebro.addanalyzer(bt.analyzers.TimeReturn, _name="time_return")
+
 
         results = cerebro.run()
-        strat = results[0]
+        
+        # time_return is a dict of {datetime: period_return_float}
 
+        strat = results[0]
+        time_return = strat.analyzers.time_return.get_analysis()
         trade_analysis = strat.analyzers.trades.get_analysis()
         num_trades = trade_analysis.get("total", {}).get("closed", 0)
-
+        equity_curve = extract_equity_curve(time_return, self.initial_cash)
+        
         return BacktestResult(
             strategy_name=strategy_cls.__name__,
             params=params,
@@ -40,4 +47,7 @@ class BacktestRunner:
             initial_cash=self.initial_cash,
             final_value=cerebro.broker.getvalue(),
             num_trades=num_trades,
+            equity_curve=equity_curve,
         )
+    
+
