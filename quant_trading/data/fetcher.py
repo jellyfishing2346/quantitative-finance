@@ -116,6 +116,10 @@ class DataFetcher:
 
     def _fetch_yfinance(self, symbol: str, start: str, end: str, interval: str) -> Optional[pd.DataFrame]:
         import yfinance as yf
+        import os
+        
+        # Disable yfinance's internal caching to avoid SQLite driver issues
+        os.environ['YFINANCE_CACHE_DIR'] = '/tmp/yfinance_cache'
 
         yf_interval = _YFINANCE_INTERVAL_MAP.get(interval)
         if yf_interval is None:
