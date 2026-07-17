@@ -43,26 +43,26 @@ It was built to be read, extended, and learned from — every module is independ
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    Dash Dashboard                        │
+│                    Dash Dashboard                       │
 │          (layout.py · callbacks.py · app.py)            │
 └───────────────────────┬─────────────────────────────────┘
                         │
 ┌───────────────────────▼─────────────────────────────────┐
-│                  Analytics Layer                         │
+│                  Analytics Layer                        │
 │        metrics.py · equity.py · tearsheet.py            │
 └───────────────────────┬─────────────────────────────────┘
                         │
 ┌───────────────────────▼─────────────────────────────────┐
-│                  Backtest Engine                         │
+│                  Backtest Engine                        │
 │       runner.py · optimizer.py · splitter.py            │
 └──────────┬────────────────────────┬─────────────────────┘
            │                        │
-┌──────────▼──────────┐  ┌──────────▼──────────────────┐
-│     Strategies       │  │        Data Layer            │
-│  momentum.py         │  │  fetcher.py  (yfinance/AV)  │
-│  mean_reversion.py   │  │  cache.py    (SQLite+zlib)  │
-│  signals.py          │  │  models.py   (Pydantic)     │
-└──────────────────────┘  └─────────────────────────────┘
+┌──────────▼──────────┐   ┌──────────▼──────────────────┐
+│     Strategies      │   │        Data Layer           │
+│  momentum.py        │   │  fetcher.py  (yfinance/AV)  │
+│  mean_reversion.py  │   │  cache.py    (SQLite+zlib)  │
+│  signals.py         │   │  models.py   (Pydantic)     │
+└─────────────────────┘   └─────────────────────────────┘
 ```
 
 ---
