@@ -2,6 +2,7 @@ import itertools
 import pandas as pd
 from .runner import BacktestRunner
 from .results import BacktestResult
+from .splitter import walk_forward_splits
 
 def grid_search(
     strategy_cls,
