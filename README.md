@@ -4,7 +4,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Tests](https://img.shields.io/badge/Tests-53%20passing-2ea44f?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
+![License](https://img.shields.io/badge/License-Apache_2.0-blue?style=flat-square)
 ![Dash](https://img.shields.io/badge/Dashboard-Plotly%20Dash-00b4d8?style=flat-square)
 ![Backtrader](https://img.shields.io/badge/Engine-Backtrader-orange?style=flat-square)
 
@@ -152,7 +152,7 @@ quantitative-finance/
 ├── docs/                       # Extended documentation
 ├── .env.example                # Environment variable template
 ├── requirements.txt            # All dependencies
-└── LICENSE                     # MIT
+└── LICENSE                     # Apache 2.0
 ```
 
 ---
@@ -276,7 +276,7 @@ See [docs/configuration.md](docs/configuration.md) for full details.
 
 ## License
 
-This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
+This project is licensed under the Apache License 2.0 — see [LICENSE](LICENSE) for details.
 
 ---
 
